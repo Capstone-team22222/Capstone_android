@@ -15,6 +15,10 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
+        <service
+                android:name=".AsleepForegroundService"
+                android:foregroundServiceType="location|microphone|phoneCall|camera" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
