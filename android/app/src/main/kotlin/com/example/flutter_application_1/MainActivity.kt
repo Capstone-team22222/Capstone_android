@@ -14,8 +14,9 @@ import ai.asleep.asleepsdk.AsleepErrorCode
 import ai.asleep.asleepsdk.data.AsleepConfig
 import ai.asleep.asleepsdk.tracking.Reports
 import ai.asleep.asleepsdk.data.Report
+import android.util.Log
 
-
+//kotlin오류 시 gradle 재로딩
 
 class MainActivity: FlutterActivity(){
     private val CHANNEL = "com.flutter_application_1.app/channel"
@@ -75,6 +76,29 @@ class MainActivity: FlutterActivity(){
 
                             }
                         })
+
+//                    Asleep.initAsleepConfig(
+//                        context = applicationContext,
+//                        apiKey = "sHDt5WgLsRgU0knI7KnCX7qnAPWzhundB8VMYqgF",
+//                        userId = null,
+//                        baseUrl = null,
+//                        callbackUrl = null,
+//                        service = "SampleApp",
+//                        object : Asleep.AsleepConfigListener {
+//                            override fun onSuccess(userId: String?, asleepConfig: AsleepConfig?) {
+//                                with (SampleApplication.sharedPref.edit()) {
+//                                    putString("user_id", userId)
+//                                    apply()
+//                                }
+//                                sharedViewModel.setUserId(userId)
+//                                sharedViewModel.setAsleepConfig(asleepConfig)
+//
+//                                Log.d(">>>> AsleepConfigListener", "onSuccess: userId - $userId")
+//                            }
+//                            override fun onFail(errorCode: Int, detail: String) {
+//                                Log.d(">>>> AsleepConfigListener", "onFail: $errorCode - $detail")
+//                            }
+//                        })
 
                 }
 
