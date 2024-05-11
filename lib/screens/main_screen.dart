@@ -24,7 +24,7 @@ class MainPage extends StatelessWidget{
 
   Future<void> _callNativeShowReportFunction() async {
     try {
-      final String result = await platform.invokeMethod('ShowReport');
+      final String result = await platform.invokeMethod('GetReport');
     } on PlatformException catch (e) {
       print("Failed to Invoke: '${e.message}'.");
     }
