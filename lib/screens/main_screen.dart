@@ -24,7 +24,7 @@ class _MainPageState extends State<MainPage>{
   void initState() {
     super.initState();
     loadAlarms();
-    subscription ??= Alarm.ringStream.stream.listen(
+    subscription ??= Alarm.ringStream.stream.asBroadcastStream().listen(
       (alarmSettings) => navigateToRingScreen(alarmSettings),
     );
   }

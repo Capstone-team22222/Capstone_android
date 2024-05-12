@@ -33,7 +33,8 @@ class _AlarmPageState extends State<AlarmPage> {
       checkAndroidNotificationPermission();
     }
     loadAlarms();
-    subscription ??= Alarm.ringStream.stream.listen(
+
+    subscription ??= Alarm.ringStream.stream.asBroadcastStream().listen(
       (alarmSettings) => navigateToRingScreen(alarmSettings),
     );
   }

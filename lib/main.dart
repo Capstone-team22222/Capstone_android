@@ -36,11 +36,11 @@ class _MyAppState extends State<MyApp> {
           children: <Widget>[
             new Offstage(
               offstage: currentIndex != 0,
-              child: new TickerMode(enabled: currentIndex == 0, child: new MaterialApp(home: MainPage(),)),
+              child: new TickerMode(enabled: currentIndex == 0, child: new MaterialApp(home: MainPage(), debugShowCheckedModeBanner: false,)),
             ),
             new Offstage(
               offstage: currentIndex != 1,
-              child: new TickerMode(enabled: currentIndex == 1, child: new MaterialApp(home: AlarmPage(),)),
+              child: new TickerMode(enabled: currentIndex == 1, child: new MaterialApp(home: AlarmPage(), debugShowCheckedModeBanner: false,)),
             )
           ]
         ),
