@@ -13,8 +13,9 @@ import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class AlarmPage extends StatefulWidget {
-  const AlarmPage({Key? key}) : super(key: key);
-
+  final AlarmSettings? alarmSettings;
+  const AlarmPage({Key? key, this.alarmSettings}) : super(key: key);
+  
   @override
   State<AlarmPage> createState() => _AlarmPageState();
 }
@@ -56,7 +57,7 @@ class _AlarmPageState extends State<AlarmPage> {
         context,
         MaterialPageRoute(
           builder: (context) =>
-              ExampleAlarmRingScreen(alarmSettings: alarmSettings),
+              AlarmRingScreen(alarmSettings: alarmSettings),
         ));
     loadAlarms();
   }

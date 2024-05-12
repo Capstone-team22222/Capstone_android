@@ -24,10 +24,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int currentIndex = 0;
-  final screens = [
-    MainPage(),
-    AlarmPage(),
-  ];
+  final List<Widget> pageList = [MainPage(), AlarmPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +32,18 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(useMaterial3: false),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        body: new Stack(
+          children: <Widget>[
+            new Offstage(
+              offstage: currentIndex != 0,
+              child: new TickerMode(enabled: currentIndex == 0, child: new MaterialApp(home: MainPage(),)),
+            ),
+            new Offstage(
+              offstage: currentIndex != 1,
+              child: new TickerMode(enabled: currentIndex == 1, child: new MaterialApp(home: AlarmPage(),)),
+            )
+          ]
+        ),
         backgroundColor: Color(0xffe9edf3),
         appBar: AppBar(
           elevation: 0,
@@ -47,8 +56,7 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
         ),
-        body: screens[currentIndex],
-        bottomNavigationBar: BottomNavigationBar(
+          bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.grey,
           selectedItemColor: Colors.white,
           unselectedItemColor: Colors.black,
