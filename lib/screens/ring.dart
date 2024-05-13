@@ -1,3 +1,4 @@
+
 import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +56,7 @@ class AlarmRingScreen extends StatelessWidget {
                 RawMaterialButton(
                   onPressed: () {
                     Alarm.stop(alarmSettings.id)
-                        .then((_) => Navigator.pop(context));
+                      .then((_) => Navigator.pop(context));
                   },
                   child: Text(
                     "중지",

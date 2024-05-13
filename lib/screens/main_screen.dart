@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'alarm_screen.dart';
 import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
 
@@ -20,14 +18,14 @@ class _MainPageState extends State<MainPage>{
   List<bool> _alarmOnOff = [];
   static StreamSubscription<AlarmSettings>? subscription;
 
-  @override
-  void initState() {
-    super.initState();
-    loadAlarms();
-    subscription ??= Alarm.ringStream.stream.asBroadcastStream().listen(
-      (alarmSettings) => navigateToRingScreen(alarmSettings),
-    );
-  }
+  //@override
+  //void initState() {
+    //super.initState();
+    //loadAlarms();
+    //subscription ??= Alarm.ringStream.stream.asBroadcastStream().listen(
+      //(alarmSettings) => navigateToRingScreen(alarmSettings),
+    //);
+  //}
 
   void loadAlarms() {
     setState(() {
@@ -44,8 +42,7 @@ class _MainPageState extends State<MainPage>{
   }
 
   Future<void> navigateToRingScreen(AlarmSettings alarmSettings) async {
-    await Navigator.push(
-        context,
+    await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) =>
               AlarmRingScreen(alarmSettings: alarmSettings),

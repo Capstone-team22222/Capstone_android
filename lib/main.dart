@@ -6,6 +6,10 @@ import 'package:alarm/alarm.dart';
 import 'package:flutter_application_1/screens/main_screen.dart';
 import 'package:flutter_application_1/screens/alarm_screen.dart';
 
+Map<String, MaterialPageRoute<dynamic>?> routes = {
+  'ring': null,
+};
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -25,7 +29,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int currentIndex = 0;
   final List<Widget> pageList = [MainPage(), AlarmPage()];
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
