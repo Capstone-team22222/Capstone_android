@@ -88,9 +88,11 @@ class MainActivity: FlutterActivity(){
                         override fun onClose(sessionId: String) {
 
                             _sessionId = sessionId //종료 시 sessionId 받음
+                            Log.d(">>>> AsleepConfigListener", "트랙킹 매니저 닫힘")
                         }
 
                         override fun onFail(errorCode: Int, detail: String) {
+                            Log.d(">>>> AsleepConfigListener", "onFail: 실패 슬립트랙킹매니저")
                         }
                     })
 
@@ -104,8 +106,9 @@ class MainActivity: FlutterActivity(){
                     Handler(Looper.getMainLooper()).postDelayed({
                         //측정 종료
                         sleepTrackingManager?.stopSleepTracking()
+                        Log.d("kotlin sleep","성공4, 3분 끝 종료")
                     }, 3000)
-                    Log.d("kotlin sleep","성공4, 3분 끝 종료")
+
 
 
 
