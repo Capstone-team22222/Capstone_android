@@ -38,16 +38,6 @@ class MainActivity: FlutterFragmentActivity() {
     private val MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 1
 
 
-class MainActivity: FlutterActivity(){
-    private val CHANNEL = "com.example.myapp/native"
-    public var _asleepConfig = MutableLiveData<AsleepConfig?>()
-    public var _userId : String? = null
-    public var _sessionId : String? = null
-
-
-
-
-
     private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,17 +48,26 @@ class MainActivity: FlutterActivity(){
     }
 
 
-
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler {
-                call, result ->
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            CHANNEL
+        ).setMethodCallHandler { call, result ->
             when (call.method) {
                 "createAsleepInstance" -> {
-                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.RECORD_AUDIO
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
                         // 권한이 아직 부여되지 않았다면, 권한 요청
-                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), MY_PERMISSIONS_REQUEST_RECORD_AUDIO)
+                        ActivityCompat.requestPermissions(
+                            this,
+                            arrayOf(Manifest.permission.RECORD_AUDIO),
+                            MY_PERMISSIONS_REQUEST_RECORD_AUDIO
+                        )
                     } else {
                         // 권한이 이미 부여되었다면, 마이크 사용 가능
                     }
@@ -87,9 +86,13 @@ class MainActivity: FlutterActivity(){
                                 viewModel.setAsleepConfig(asleepConfig)
                                 println(viewModel.toString())
                                 Log.d(">>>> AsleepConfigListener", "onSuccess: userId - $userId")
-                                Log.d(">>>> AsleepConfigListener", "onSuccess: Developer Id - $userId")
+                                Log.d(
+                                    ">>>> AsleepConfigListener",
+                                    "onSuccess: Developer Id - $userId"
+                                )
 
                             }
+
                             override fun onFail(errorCode: Int, detail: String) {
                                 Log.d(">>>> AsleepConfigListener", "onFail: $errorCode - $detail")
 
@@ -100,7 +103,7 @@ class MainActivity: FlutterActivity(){
 
                 "StartSleepTracking" -> {
                     viewModel.setStartTrackingTime()
-                    viewModel.setErrorData(null,null)
+                    viewModel.setErrorData(null, null)
                     viewModel.setReport(null)
                     startService(Intent(this, RecordService::class.java).apply {
                         action = RecordService.ACTION_START_OR_RESUME_SERVICE
@@ -130,10 +133,12 @@ class MainActivity: FlutterActivity(){
                     viewModel.getcurrentanalysis()
                     println(viewModel.SessionLiveData.toString())
                 }
+
                 else -> result.notImplemented() //호출한 함수가 없을 때
             }
         }
     }
+
 
 
 
