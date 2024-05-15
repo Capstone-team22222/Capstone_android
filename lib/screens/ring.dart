@@ -3,10 +3,10 @@ import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_ripple_animation/simple_ripple_animation.dart';
 
-class ExampleAlarmRingScreen extends StatelessWidget {
+class AlarmRingScreen extends StatelessWidget {
   final AlarmSettings alarmSettings;
 
-  const ExampleAlarmRingScreen({Key? key, required this.alarmSettings})
+  const AlarmRingScreen({Key? key, required this.alarmSettings})
       : super(key: key);
 
   @override

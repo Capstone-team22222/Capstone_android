@@ -1,7 +1,15 @@
+
 plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-kapt'
+
+}
+
+hilt {
+    enableAggregatingTask = false
 }
 
 def localProperties = new Properties()
@@ -21,6 +29,8 @@ def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
+
+
 
 android {
     android {
@@ -51,7 +61,7 @@ android {
         applicationId "com.example.flutter_application_1"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 24
+        minSdkVersion 26
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -71,8 +81,24 @@ flutter {
 }
 
 dependencies {
+    def appcompat_version = "1.6.1"
+
+    implementation "com.google.dagger:hilt-android:2.48"
+    kapt "com.google.dagger:hilt-compiler:2.48"
+
+    implementation("androidx.navigation:navigation-compose:2.5.3")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation "androidx.fragment:fragment-ktx:1.7.0"
+    implementation 'androidx.activity:activity-ktx:1.9.0'
+
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "androidx.appcompat:appcompat-resources:$appcompat_version"
+    implementation 'androidx.lifecycle:lifecycle-service:2.7.0'
+    implementation 'androidx.core:core:1.13.1'
+
     implementation 'org.jetbrains.bio:npy:0.3.5'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.google.code.gson:gson:2.9.1'
     implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
+
 }

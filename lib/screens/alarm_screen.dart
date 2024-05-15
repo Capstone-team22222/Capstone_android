@@ -56,7 +56,7 @@ class _AlarmPageState extends State<AlarmPage> {
         context,
         MaterialPageRoute(
           builder: (context) =>
-              ExampleAlarmRingScreen(alarmSettings: alarmSettings),
+              AlarmRingScreen(alarmSettings: alarmSettings),
         ));
     loadAlarms();
   }
