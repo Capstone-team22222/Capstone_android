@@ -92,7 +92,6 @@ class MainActivity: FlutterFragmentActivity() {
                     startService(Intent(this, RecordService::class.java).apply {
                         action = RecordService.ACTION_START_OR_RESUME_SERVICE
                     })
-
                 }
 
                 "StopSleepTracking" -> {
@@ -103,11 +102,20 @@ class MainActivity: FlutterFragmentActivity() {
 
                 "GetReport" -> {
                     viewModel.getReport()
-                    println(viewModel.reportLiveData.value) //report 가공할 방법 추가하기
+                    viewModel.reportLiveData.observe(this) { report ->
+                        if (report != null) {
+                            println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+                            println(report.toString())
+                            println(report.stat.toString())
+                        } else {
+                            println("Report is null")
+                        }
                     }
+                }
 
                 "ShowCurrent" -> {
-
+                    viewModel.getcurrentanalysis()
+                    println(viewModel.SessionLiveData.toString())
                 }
                 else -> result.notImplemented() //호출한 함수가 없을 때
             }

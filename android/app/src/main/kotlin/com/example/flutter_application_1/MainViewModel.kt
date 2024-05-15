@@ -4,6 +4,7 @@ import ai.asleep.asleepsdk.Asleep
 import ai.asleep.asleepsdk.AsleepErrorCode
 import ai.asleep.asleepsdk.data.AsleepConfig
 import ai.asleep.asleepsdk.data.Report
+import ai.asleep.asleepsdk.data.Session
 import ai.asleep.asleepsdk.tracking.Reports
 import ai.asleep.asleepsdk.tracking.SleepTrackingManager
 import android.app.Application
@@ -44,6 +45,13 @@ class MainViewModel @Inject constructor() : ViewModel() {
 
     val reportLiveData: LiveData<Report?>
         get() = _reportLiveData
+
+
+    private val _sessionLiveData = MutableLiveData<Session?> ()
+
+    val SessionLiveData: LiveData<Session?>
+        get() = _sessionLiveData
+
 
     private val _errorCodeLiveData = MutableLiveData<Int?>()
     val errorCodeLiveData: LiveData<Int?>
@@ -149,5 +157,21 @@ class MainViewModel @Inject constructor() : ViewModel() {
                 _errorCodeLiveData.postValue(errorCode)
             }
         })
+    }
+
+    fun getcurrentanalysis(){
+        val sleeptrackingmanager = sleepTrackingManager
+        sleeptrackingmanager?.requestAnalysis(object : SleepTrackingManager.AnalysisListener {
+            override fun onSuccess(session: Session){
+                _sessionLiveData.postValue(session)
+                Log.d(">>>>> getcurrentanalysis", "onSuccess: $session")
+            }
+
+            override fun onFail(errorCode: Int, detail: String){
+
+            }
+
+        }
+        )
     }
 }
