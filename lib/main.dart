@@ -5,6 +5,7 @@ import 'package:alarm/alarm.dart';
 
 import 'package:flutter_application_1/screens/main_screen.dart';
 import 'package:flutter_application_1/screens/alarm_screen.dart';
+import 'package:flutter_application_1/service/platformservice.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,6 +14,7 @@ Future<void> main() async {
   await Alarm.init(showDebugLogs: true);
 
   runApp(MyApp());
+  PlatformService.onAppStart(); //처음 앱 실행 시 호출하는 함수
 }
 
 class MyApp extends StatefulWidget {
