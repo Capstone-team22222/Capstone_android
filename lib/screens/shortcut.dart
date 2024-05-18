@@ -9,6 +9,9 @@ class AlarmHomeShortcutButton extends StatefulWidget {
   const AlarmHomeShortcutButton({Key? key, required this.refreshAlarms})
       : super(key: key);
 
+  static final GlobalKey<_AlarmHomeShortcutButtonState> global_key =
+  GlobalKey<_AlarmHomeShortcutButtonState>();
+
   @override
   State<AlarmHomeShortcutButton> createState() =>
       _AlarmHomeShortcutButtonState();
@@ -35,13 +38,14 @@ class _AlarmHomeShortcutButtonState
     final alarmSettings = AlarmSettings(
       id: DateTime.now().millisecondsSinceEpoch % 10000,
       dateTime: dateTime1,
-      assetAudioPath: 'assets/marimba.mp3',
+      assetAudioPath: '../../assets/marimba.mp3',
       volume: volume,
       notificationTitle: '알람 테스트',
       notificationBody: '테스트',
     );
 
     await Alarm.set(alarmSettings: alarmSettings);
+    widget.refreshAlarms();
 
   }
 

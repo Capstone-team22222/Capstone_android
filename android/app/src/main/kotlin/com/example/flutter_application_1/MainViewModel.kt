@@ -29,6 +29,8 @@ import kotlin.collections.ArrayList
 @HiltViewModel
 class MainViewModel @Inject constructor() : ViewModel() {
 
+    var _sleepLevel: Int = 0; // sleepStage의 마지막 요소
+
     private var _userId: String? = null
     val userId: String? get() = _userId
 
@@ -113,7 +115,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private fun getCurrentDateTime(): String {
+    public fun getCurrentDateTime(): String {
         var time: String
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val currentDateTime = LocalDateTime.now()
@@ -164,10 +166,12 @@ class MainViewModel @Inject constructor() : ViewModel() {
         sleeptrackingmanager?.requestAnalysis(object : SleepTrackingManager.AnalysisListener {
             override fun onSuccess(session: Session){
                 _sessionLiveData.postValue(session)
-                Log.d(">>>>> getcurrentanalysis", "onSuccess: $session")
+                Log.d(">>>>> 실시간 분석 결과", "onSuccess: " + session.sleepStages) //수면 단계 가져옴
+                _sleepLevel = session.sleepStages?.lastOrNull() ?: 0
             }
 
             override fun onFail(errorCode: Int, detail: String){
+                Log.d(">>>>> getcurrentanalysis", "실패")
 
             }
 

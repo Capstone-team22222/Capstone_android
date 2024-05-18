@@ -64,6 +64,7 @@ class RecordService : LifecycleService() {
         viewModel.asleepConfig.observe(this) {
             createSleepTrackingManager()
             viewModel.sleepTrackingManager?.startSleepTracking()
+            //viewModel.sleepTrackingManager?.requestAnalysis() // 실시간 분석을 위해 추가
             Log.d(TAG, "starttracking")
 
         }
@@ -82,7 +83,7 @@ class RecordService : LifecycleService() {
             if (viewModel.asleepConfig.value == null) {
                 if (Asleep.hasUnfinishedSession(applicationContext)) {
                     Log.d(">>>>> onStartCommand", ": hasUnfinishedSession")
-                    viewModel.setAsleepConfig(Asleep.getSavedAsleepConfig(applicationContext, "sHDt5WgLsRgU0knI7KnCX7qnAPWzhundB8VMYqgF"))
+                    viewModel.setAsleepConfig(Asleep.getSavedAsleepConfig(applicationContext, "3vocIdIG1j7CBtr2hehvmKfzrrm1p40dtfuocF3t"))
                 }
             }
         }
@@ -186,3 +187,4 @@ class RecordService : LifecycleService() {
 
 
 }
+
