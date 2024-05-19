@@ -111,11 +111,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/screens/ring.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'shortcut.dart';
 
 import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
 import 'dart:async';
+import 'package:flutter_application_1/screens/alarm_screen.dart';
 
 
 
@@ -156,9 +158,9 @@ class MainPage extends StatelessWidget {
     }
   }
 
-  Future<void> _callNativeShowTestFunction() async {
+  Future<void> _callNativeWakeupFunction(String h, String m) async {
     try {
-      final String result = await platform.invokeMethod('ShowTest');
+      final String result = await platform.invokeMethod('Wakeup',{'hour':h, 'min':m});
     } on PlatformException catch (e) {
       print("Failed to Invoke: '${e.message}'.");
     }
@@ -170,6 +172,30 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     methodChannel.setMethodCallHandler(nativeMethodCallHandler);
+
+    String _hourValue = '';
+    String _minValue = '';
+
+    void _hourValueChanged(String value) {
+      _hourValue = value;
+    }
+
+
+    void _minValueChanged(String value) {
+      _minValue = value;
+    }
+
+    void __callNativeWakeupFunction() {
+
+      Fluttertoast.showToast(
+        msg: "$_hourValue : $_minValue 설정",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+
+      _callNativeWakeupFunction(_hourValue, _minValue);
+
+    }
 
     return Scaffold(
       body: Center(
@@ -194,9 +220,22 @@ class MainPage extends StatelessWidget {
               onPressed: _callNativeShowCurrentFunction,
               child: Text('현재 상태'),
             ),
+            TextField(
+              onChanged: _hourValueChanged,
+              decoration: InputDecoration(
+                labelText: 'Hour',
+              ),
+            ),
+            TextField(
+              onChanged: _minValueChanged,
+              decoration: InputDecoration(
+                labelText: 'Min',
+              ),
+            ),
+
             ElevatedButton(
-              onPressed: _callNativeShowTestFunction,
-              child: Text('테스트'),
+              onPressed: __callNativeWakeupFunction,
+              child: Text('Wakeup'), //일어날 시간
             )
           ],
         ),
@@ -225,12 +264,14 @@ class MainPage extends StatelessWidget {
     final alarmSettings = AlarmSettings(
       id: id,
       dateTime: DateTime.now(),
-      assetAudioPath: 'marimba.mp3',
+      assetAudioPath: 'assets/marimba.mp3',
       volume: 1.0,
       notificationTitle: 'RingRing',
       notificationBody: '테스트',
     );
     await Alarm.set(alarmSettings: alarmSettings);
+
+
 
 
 

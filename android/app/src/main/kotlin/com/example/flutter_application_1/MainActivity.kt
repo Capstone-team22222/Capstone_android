@@ -38,20 +38,20 @@ import kotlin.properties.Delegates
 /*
 
 > 에뮬레이터 보다는 실제 스마트폰에서 실행해보는 것을 추천함.(알람이 진동만 와서 확인하기 편함)
-> project를 실행하고 지정된 시간에 자동으로 측정된 후 알람 울림.
+> project를 실행하고 기상 시간을 입력하고 기다림. 자동으로 수면 분석 후 알람 울림.
 
 성공 :
  > 지정된 시간에 측정을 시작할 수 있음.
  > 기상 시간 기준 20분 전부터 sleepLevel을 측정함.
  > 얕은 수면(1)이 3번 측정되면 알람을 울림.
+ > 사용자에게 기상 시간을 입력 받아 사용하는 기능
 
 보완할 것 :
- > 진동은 울리나 알람 소리가 안남.
- > 알람 종료를 하단 "알람"으로 이동 후 종료해야 함.
+ > 알람 문제 : 진동은 울리나 알람 소리가 안남. + 알람 종료를 하단 "알람"으로 이동 후 종료해야 함.
 
 
 더 필요한 기능 :
- > 사용자에게 기상 시간을 입력 받아 사용하는 기능
+
 
 
  */
@@ -76,7 +76,7 @@ class MainActivity: FlutterFragmentActivity() {
     var wakeupMin:Int =0
 
     //StartSleepTracking 자동으로 실행될 시간 설정(24Hour), ex) 11, 0 => 매일 11시 부터 sleep 측정
-    val startTrackingHour:Int = 23
+    val startTrackingHour:Int = 11
     val startTrackingMin:Int = 0
 
     //기상 시간 기준, 측정을 시작할 시간을 설정, ex) 20 => wakeupHour = 7, wakeupMin = 40
@@ -145,30 +145,30 @@ class MainActivity: FlutterFragmentActivity() {
 
                    stopTracking() //넣어야 측정됨;;
 
-
-                    println("(기상 시간 - repeatTime)을 구함, sleep stage level를 처음 얻어오는 시간을 알아냄 ")
-                    val (newHour, newMin) = findHourAndMin(wakeupHour, wakeupMin, repeatTime) //일어날 시간의 20분 전의 시간을 구함
-                    wakeupHour = newHour
-                    wakeupMin = newMin
-
-                   println("$wakeupHour:$wakeupMin") // 계산된 시간
-
-
-                    startTrackingManager() // 지정해놓은 시간에 측정이 시작됨
-                    wakeup20()
-
-                   thread {
-                       while (!flag) {
-                           println("Waiting for flag to become true...")
-                           Thread.sleep(10000) // Sleep for 1 second
-                       }
-                       println("Alarm 호출")
-                       runOnUiThread {
-                           nativeChannel?.invokeMethod("ring", "ok")
-                       }
-                   }
-
-                   result.success("Asleep instance created")
+//
+//                    println("(기상 시간 - repeatTime)을 구함, sleep stage level를 처음 얻어오는 시간을 알아냄 ")
+//                    val (newHour, newMin) = findHourAndMin(wakeupHour, wakeupMin, repeatTime) //일어날 시간의 20분 전의 시간을 구함
+//                    wakeupHour = newHour
+//                    wakeupMin = newMin
+//
+//                   println("$wakeupHour:$wakeupMin") // 계산된 시간
+//
+//
+//                    startTrackingManager() // 지정해놓은 시간에 측정이 시작됨
+//                    wakeup20()
+//
+//                   thread {
+//                       while (!flag) {
+//                           println("Waiting for flag to become true...")
+//                           Thread.sleep(10000) // Sleep for 1 second
+//                       }
+//                       println("Alarm 호출")
+//                       runOnUiThread {
+//                           nativeChannel?.invokeMethod("ring", "ok")
+//                       }
+//                   }
+//
+//                   result.success("Asleep instance created")
 
                 }
 
@@ -206,7 +206,42 @@ class MainActivity: FlutterFragmentActivity() {
 
                 }
 
-                "ShowTest" -> { //자동 실행
+                "Wakeup" -> {
+                    wakeupHour = Integer.parseInt(call.argument<String>("hour"))
+                    wakeupMin = Integer.parseInt(call.argument<String>("min"))
+
+                    println(">>>>>> 받아온 시간 : $wakeupHour : $wakeupMin")
+
+//                    stopTracking() //넣어야 측정됨;;
+
+                    println("(기상 시간 - repeatTime)을 구함, sleep stage level를 처음 얻어오는 시간을 알아냄 ")
+
+                    val (newHour, newMin) = findHourAndMin(wakeupHour, wakeupMin, repeatTime) //일어날 시간의 20분 전의 시간을 구함
+                    wakeupHour = newHour
+                    wakeupMin = newMin
+
+                    println("$wakeupHour:$wakeupMin") // 계산된 시간
+
+
+
+                    startTrackingManager() // 지정해놓은 시간에 측정이 시작됨
+                    wakeup20()
+
+                    thread {
+                        while (!flag) {
+                            println("Waiting for flag to become true...")
+                            Thread.sleep(10000) // Sleep for 1 second
+                        }
+                        println("Alarm 호출")
+                        runOnUiThread {
+                            nativeChannel?.invokeMethod("ring", "ok")
+                        }
+                    }
+
+                    result.success("Asleep instance created")
+
+
+
 
 
                 }
@@ -277,10 +312,10 @@ class MainActivity: FlutterFragmentActivity() {
         var task1 = Runnable { //수면 검사 : 30초에 한번씩 검사
             viewModel.getcurrentanalysis() //실시간으로 받아옴
             println(">>>>>>>>>수면 상태 : " + viewModel._sleepLevel) //sleepStage 리스트의 마지막 요소
-            if(viewModel._sleepLevel == 3){// level 1이 3번 나오면 얕은 수면 중이라 판단.
+            if(viewModel._sleepLevel == 1){// level 1이 3번 나오면 얕은 수면 중이라 판단.
                 counter++
                 println(">>>>>>>>>수면 상태 : " + viewModel._sleepLevel + "카운터 : "+ counter)
-                if(counter == 1){ //카운터 얕은수면(1) 3번 나오면 종료
+                if(counter == 3){ //카운터 얕은수면(1) 3번 나오면 종료
                     println(">>>>>>>>>>>>카운터 종료")
                     stopTracking()
                     flag = true //알람을 울리기 위한 boolean flag => true : 알람 실행
