@@ -270,9 +270,11 @@ class MainPage extends StatelessWidget {
     int id = num;
     final alarmSettings = AlarmSettings(
       id: id,
-      dateTime: DateTime.now().add(Duration(milliseconds: 500)),//현재시간으로 설정하면 처리되는 시간 때문에 알람이 울리지 않음.
+      dateTime: DateTime.now().add(Duration(milliseconds: 800)),//현재시간으로 설정하면 처리되는 시간 때문에 알람이 울리지 않음.
       assetAudioPath: 'assets/marimba.mp3',
-      volume: 1.0,
+      loopAudio: true,
+      vibrate: true,
+      volume: 0.5,
       notificationTitle: 'RingRing',
       notificationBody: '테스트',
     );
