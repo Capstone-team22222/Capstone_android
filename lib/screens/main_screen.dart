@@ -108,16 +108,20 @@
 // }
 
 
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/screens/ring.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../main.dart';
 import 'shortcut.dart';
 
 import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
 import 'dart:async';
 import 'package:flutter_application_1/screens/alarm_screen.dart';
+import 'ring.dart';
 
 
 
@@ -195,7 +199,10 @@ class MainPage extends StatelessWidget {
 
       _callNativeWakeupFunction(_hourValue, _minValue);
 
+
+
     }
+
 
     return Scaffold(
       body: Center(
@@ -263,17 +270,14 @@ class MainPage extends StatelessWidget {
     int id = num;
     final alarmSettings = AlarmSettings(
       id: id,
-      dateTime: DateTime.now(),
+      dateTime: DateTime.now().add(Duration(milliseconds: 500)),//현재시간으로 설정하면 처리되는 시간 때문에 알람이 울리지 않음.
       assetAudioPath: 'assets/marimba.mp3',
       volume: 1.0,
       notificationTitle: 'RingRing',
       notificationBody: '테스트',
     );
     await Alarm.set(alarmSettings: alarmSettings);
-
-
-
-
+    MyApp.globalKey.currentState?.setTabIndex(1); //AlarmPage()로 이동
 
 
   }

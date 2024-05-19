@@ -44,10 +44,11 @@ import kotlin.properties.Delegates
  > 지정된 시간에 측정을 시작할 수 있음.
  > 기상 시간 기준 20분 전부터 sleepLevel을 측정함.
  > 얕은 수면(1)이 3번 측정되면 알람을 울림.
- > 사용자에게 기상 시간을 입력 받아 사용하는 기능
+ > 사용자에게 기상 시간을 입력 받아 사용하는 기능.
+ > 알람이 울릴 때 알람화면 안뜨는 것을 수정함.
 
 보완할 것 :
- > 알람 문제 : 진동은 울리나 알람 소리가 안남. + 알람 종료를 하단 "알람"으로 이동 후 종료해야 함.
+ > 알람 문제 : 진동은 울리나 알람 소리가 안남.
 
 
 더 필요한 기능 :
@@ -76,7 +77,7 @@ class MainActivity: FlutterFragmentActivity() {
     var wakeupMin:Int =0
 
     //StartSleepTracking 자동으로 실행될 시간 설정(24Hour), ex) 11, 0 => 매일 11시 부터 sleep 측정
-    val startTrackingHour:Int = 11
+    val startTrackingHour:Int = 23
     val startTrackingMin:Int = 0
 
     //기상 시간 기준, 측정을 시작할 시간을 설정, ex) 20 => wakeupHour = 7, wakeupMin = 40

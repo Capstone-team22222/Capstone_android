@@ -12,13 +12,16 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   await Alarm.init(showDebugLogs: true);
+  runApp(MyApp(key: MyApp.globalKey)); // MyApp 위젯에 globalKey 적용
 
-  runApp(MyApp());
+ // runApp(MyApp());
   PlatformService.onAppStart(); //처음 앱 실행 시 호출하는 함수
 }
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+  static final GlobalKey<_MyAppState> globalKey = GlobalKey<_MyAppState>();
+
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -30,6 +33,12 @@ class _MyAppState extends State<MyApp> {
     MainPage(),
     AlarmPage(),
   ];
+
+  void setTabIndex(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
