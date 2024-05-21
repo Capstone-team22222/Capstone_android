@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 class AlarmEditScreen extends StatefulWidget {
   final AlarmSettings? alarmSettings;
 
-  const AlarmEditScreen({Key? key, this.alarmSettings})
-      : super(key: key);
+  const AlarmEditScreen({super.key, this.alarmSettings});
 
   @override
   State<AlarmEditScreen> createState() => _AlarmEditScreenState();
@@ -124,7 +123,7 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Padding(padding: EdgeInsets.only(top: 0.0, bottom: 0)),
+          const Padding(padding: EdgeInsets.only(top: 0.0, bottom: 0)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
