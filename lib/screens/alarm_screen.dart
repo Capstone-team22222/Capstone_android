@@ -13,7 +13,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class AlarmPage extends StatefulWidget {
-  const AlarmPage({Key? key}) : super(key: key);
+  const AlarmPage({super.key});
 
   @override
   State<AlarmPage> createState() => _AlarmPageState();
@@ -21,7 +21,7 @@ class AlarmPage extends StatefulWidget {
 
 class _AlarmPageState extends State<AlarmPage> {
   late List<AlarmSettings> alarms;
-  List<bool> _alarmOnOff = [];
+  final List<bool> _alarmOnOff = [];
 
   static StreamSubscription<AlarmSettings>? subscription;
 
@@ -125,7 +125,23 @@ class _AlarmPageState extends State<AlarmPage> {
               IconButton(
                 onPressed: () => navigateToAlarmScreen(null),
                 icon: const Icon(Icons.add),
+                    
               ),
+              PopupMenuButton(
+                        padding: const EdgeInsets.only(right: 10, top: 20),
+                        icon: const Icon(Icons.more_vert,
+                        color: Colors.grey),
+                        itemBuilder: (context) => [             
+                      const PopupMenuItem<int>(
+                        value: 0,
+                        child: Text("상태로 정렬")
+                      ),
+                      const PopupMenuItem<int>(
+                        value: 1,
+                        child: Text("도움말")
+                      ),
+                    ], onSelected: (item) => selectedItem(context, item),
+                    ),
             ],
           ),
           alarms.isNotEmpty
@@ -139,7 +155,7 @@ class _AlarmPageState extends State<AlarmPage> {
                 )
               : Expanded(
                   child: Align(
-                    alignment: Alignment(0.0, -0.117),
+                    alignment: const Alignment(0.0, -0.117),
                     child: Text(
                       "설정된 알람이 없습니다.",
                       style: Theme.of(context).textTheme.titleMedium,
@@ -163,6 +179,17 @@ class _AlarmPageState extends State<AlarmPage> {
        ),
        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+  void selectedItem(BuildContext context, int item) {
+    switch(item){
+      case 0:
+      
+      break;
+      case 1:
+      print('나중에 추가할 기능');
+      break;
+    }
   }
 
   List<String> _hour(TimeOfDay time) {
@@ -267,10 +294,10 @@ class Realtime extends StatefulWidget {
   const Realtime({super.key});
 
   @override
-  _RealtimeState createState() => _RealtimeState();
+  RealtimeState createState() => RealtimeState();
 }
 
-class _RealtimeState extends State<Realtime> {
+class RealtimeState extends State<Realtime> {
   late StreamController<DateTime> _clockStreamController;
   late DateTime _currentTime;
 
