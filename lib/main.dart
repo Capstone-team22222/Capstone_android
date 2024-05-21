@@ -1,32 +1,37 @@
 import 'dart:async';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:alarm/alarm.dart';
 
 import 'package:flutter_application_1/screens/main_screen.dart';
 import 'package:flutter_application_1/screens/alarm_screen.dart';
+import 'package:flutter_application_1/screens/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   await Alarm.init(showDebugLogs: true);
+  
+  runApp(const MyApp());
+  runApp(const MyScreen());
 
-  runApp(MyApp());
+  
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  MyAppState createState() => MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> {
   int currentIndex = 0;
   final screens = [
-    MainPage(),
-    AlarmPage(),
+    const MainPage(),
+    const AlarmPage(),
   ];
 
   @override
@@ -35,12 +40,17 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(useMaterial3: false),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Color(0xffe9edf3),
+        backgroundColor: const Color(0xffe9edf3),
         appBar: AppBar(
           elevation: 0,
           centerTitle: true,
-          backgroundColor: Colors.grey,
-          title: Text(
+          backgroundColor: const Color.fromRGBO(223, 193, 236, 1),
+          leading: IconButton(
+            onPressed: (){},
+            icon: const Icon(Icons.sunny, size: 30),
+            padding: const EdgeInsets.only(left: 120)
+            ),
+          title: const Text(
             "수면 추적",
             style: TextStyle(
               color: Colors.black,
@@ -48,24 +58,31 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         body: screens[currentIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.grey,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.black,
-          currentIndex: currentIndex,
+        bottomNavigationBar: CurvedNavigationBar(
+          backgroundColor: Colors.white,
+          buttonBackgroundColor: const Color.fromRGBO(223, 193, 236, 1),
+          color: const Color.fromRGBO(223, 193, 236, 1),
+          animationDuration: const Duration(milliseconds: 300),          
+          // currentIndex: currentIndex,
           onTap: (index) => setState(() => currentIndex = index),
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "수면 기록",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.alarm),
-              label: "알람",
-            ),
+          items: const <Widget>[
+            Icon(Icons.home, size: 36, color: Colors.white),
+            Icon(Icons.alarm, size: 36, color: Colors.white),
           ],
         ),
       ),
+    );
+  }
+}
+
+class MyScreen extends StatelessWidget{
+  const MyScreen({super.key});
+  
+  @override 
+  Widget build(BuildContext context){
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: SplashScreen(),
     );
   }
 }
