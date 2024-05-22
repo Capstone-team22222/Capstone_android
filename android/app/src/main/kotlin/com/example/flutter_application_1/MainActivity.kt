@@ -46,6 +46,10 @@ import kotlin.properties.Delegates
  > 사용자에게 기상 시간을 입력 받아 사용하는 기능.
  > 알람이 울릴 때 알람화면 안뜨는 것을 수정함.
  > 알람 문제 소리 문제 해결함.
+ 
+ 
+ 오류 : 
+ ringRing으로 호출된 알람 처음만 종료화면?이 뜸. 2번째부터는 알람은 울리지만, 종료화면이 안뜸
 
 
  */
@@ -70,8 +74,8 @@ class MainActivity: FlutterFragmentActivity() {
     var wakeupMin:Int =0
 
     //StartSleepTracking 자동으로 실행될 시간 설정(24Hour), ex) 11, 0 => 매일 11시 부터 sleep 측정
-    val startTrackingHour:Int = 23
-    val startTrackingMin:Int = 0
+    val startTrackingHour:Int = 8
+    val startTrackingMin:Int = 24
 
     //기상 시간 기준, 측정을 시작할 시간을 설정, ex) 20 => wakeupHour = 7, wakeupMin = 40
     val repeatTime:Long = 20
@@ -138,6 +142,7 @@ class MainActivity: FlutterFragmentActivity() {
                         })
 
                    stopTracking() //넣어야 측정됨;;
+                   startTrackingManager() // 지정해놓은 시간에 측정이 시작됨
 
 //
 //                    println("(기상 시간 - repeatTime)을 구함, sleep stage level를 처음 얻어오는 시간을 알아냄 ")
@@ -218,7 +223,7 @@ class MainActivity: FlutterFragmentActivity() {
 
 
 
-                    startTrackingManager() // 지정해놓은 시간에 측정이 시작됨
+                    //startTrackingManager() // 지정해놓은 시간에 측정이 시작됨
                     wakeup20()
 
                     thread {
