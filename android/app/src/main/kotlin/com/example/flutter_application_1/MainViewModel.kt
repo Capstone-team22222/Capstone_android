@@ -5,12 +5,11 @@ import ai.asleep.asleepsdk.AsleepErrorCode
 import ai.asleep.asleepsdk.data.AsleepConfig
 import ai.asleep.asleepsdk.data.Report
 import ai.asleep.asleepsdk.data.Session
+import ai.asleep.asleepsdk.data.SleepSession
 import ai.asleep.asleepsdk.tracking.Reports
 import ai.asleep.asleepsdk.tracking.SleepTrackingManager
-import android.app.Application
 import android.os.Build
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -46,12 +45,15 @@ class MainViewModel @Inject constructor() : ViewModel() {
     val reportLiveData: LiveData<Report?>
         get() = _reportLiveData
 
-
     private val _sessionLiveData = MutableLiveData<Session?> ()
 
     val SessionLiveData: LiveData<Session?>
         get() = _sessionLiveData
 
+    private val _MultipleReportsLiveData = MutableLiveData<List<SleepSession>?> ()
+
+    val MultipleReportsLiveData: LiveData<List<SleepSession>?>
+        get() = _MultipleReportsLiveData
 
     private val _errorCodeLiveData = MutableLiveData<Int?>()
     val errorCodeLiveData: LiveData<Int?>
@@ -159,7 +161,40 @@ class MainViewModel @Inject constructor() : ViewModel() {
         })
     }
 
-    fun getcurrentanalysis(){
+    fun getReport(sessionId: String?){
+        val reports = Asleep.createReports(_asleepConfig.value)
+
+        reports?.getReport(sessionId!!, object : Reports.ReportListener {
+            override fun onSuccess(report: Report?) {
+                Log.d(">>>>> getReport", "onSuccess: $report")
+                _reportLiveData.postValue(report)
+            }
+
+            override fun onFail(errorCode: Int, detail: String) {
+                Log.d(">>>>> getReport", "onFail: $errorCode - $detail")
+                _errorDetail = detail
+                _errorCodeLiveData.postValue(errorCode)
+            }
+        })
+    }
+
+    fun getMultipleReports(fromdate: String){
+        val reports = Asleep.createReports(_asleepConfig.value)
+
+        reports?.getReports(fromDate = fromdate, toDate = SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time),
+            reportsListener = object : Reports.ReportsListener{
+            override fun onSuccess(reports: List<SleepSession>?) {
+                Log.d(">>>>> getmultipleReports", "onSuccess: $reports")
+                _MultipleReportsLiveData.postValue(reports)
+            }
+
+            override fun onFail(errorCode: Int, detail: String) {
+                Log.d(">>>>> getReport", "onFail: $errorCode - $detail")
+            }
+        })
+    }
+
+    fun getCurrentAnalysis(){
         val sleeptrackingmanager = sleepTrackingManager
         sleeptrackingmanager?.requestAnalysis(object : SleepTrackingManager.AnalysisListener {
             override fun onSuccess(session: Session){
@@ -174,4 +209,5 @@ class MainViewModel @Inject constructor() : ViewModel() {
         }
         )
     }
+
 }

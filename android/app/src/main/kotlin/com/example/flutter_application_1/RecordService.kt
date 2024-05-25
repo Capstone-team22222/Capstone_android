@@ -74,7 +74,6 @@ class RecordService : LifecycleService() {
         viewModel.sessionIdLiveData.observe(this, sessionIdObserver)
     }
 
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         if (intent?.action == null || intent.action == ACTION_START_OR_RESUME_SERVICE) {
