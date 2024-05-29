@@ -69,13 +69,14 @@ class MainActivity: FlutterFragmentActivity() {
         println("flag값이 변경됨")
     }
 
+    //시간은 기본 8:0기상, 11시부터 측정 : 사용자 입력으로 바꿀 수 있음.
     //사용자가 일어나야 하는 시간을 설정(24Hour), ex) 8,0 => 8시에 기상
     var wakeupHour:Int =8
     var wakeupMin:Int =0
 
     //StartSleepTracking 자동으로 실행될 시간 설정(24Hour), ex) 11, 0 => 매일 11시 부터 sleep 측정
-    val startTrackingHour:Int = 8
-    val startTrackingMin:Int = 24
+    val startTrackingHour:Int = 23
+    val startTrackingMin:Int = 0
 
     //기상 시간 기준, 측정을 시작할 시간을 설정, ex) 20 => wakeupHour = 7, wakeupMin = 40
     val repeatTime:Long = 20
@@ -144,65 +145,23 @@ class MainActivity: FlutterFragmentActivity() {
                    stopTracking() //넣어야 측정됨;;
                    startTrackingManager() // 지정해놓은 시간에 측정이 시작됨
 
-//
-//                    println("(기상 시간 - repeatTime)을 구함, sleep stage level를 처음 얻어오는 시간을 알아냄 ")
-//                    val (newHour, newMin) = findHourAndMin(wakeupHour, wakeupMin, repeatTime) //일어날 시간의 20분 전의 시간을 구함
-//                    wakeupHour = newHour
-//                    wakeupMin = newMin
-//
-//                   println("$wakeupHour:$wakeupMin") // 계산된 시간
-//
-//
-//                    startTrackingManager() // 지정해놓은 시간에 측정이 시작됨
-//                    wakeup20()
-//
-//                   thread {
-//                       while (!flag) {
-//                           println("Waiting for flag to become true...")
-//                           Thread.sleep(10000) // Sleep for 1 second
-//                       }
-//                       println("Alarm 호출")
-//                       runOnUiThread {
-//                           nativeChannel?.invokeMethod("ring", "ok")
-//                       }
-//                   }
-//
-//                   result.success("Asleep instance created")
+
 
                 }
 
 
                 "StartSleepTracking" -> {
-//                    viewModel.setStartTrackingTime()
-//                    viewModel.setErrorData(null, null)
-//                    viewModel.setReport(null)
-//                    startService(Intent(this, RecordService::class.java).apply {
-//                        action = RecordService.ACTION_START_OR_RESUME_SERVICE
-//                    })
                 }
 
                 "StopSleepTracking" -> {
-//                    startService(Intent(this, RecordService::class.java).apply {
-//                        action = RecordService.ACTION_STOP_SERVICE
-//                    })
+
                 }
 
                 "GetReport" -> {
-//                    viewModel.getReport()
-//                    viewModel.reportLiveData.observe(this) { report ->
-//                        if (report != null) {
-//                            println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-//                            println(report.toString())
-//                            println(report.stat.toString())
-//                        } else {
-//                            println("Report is null")
-//                        }
-//                    }
+
                 }
 
                 "ShowCurrent" -> {
-                    ringAlarm()
-
                 }
 
                 "Wakeup" -> {
@@ -211,7 +170,6 @@ class MainActivity: FlutterFragmentActivity() {
 
                     println(">>>>>> 받아온 시간 : $wakeupHour : $wakeupMin")
 
-//                    stopTracking() //넣어야 측정됨;;
 
                     println("(기상 시간 - repeatTime)을 구함, sleep stage level를 처음 얻어오는 시간을 알아냄 ")
 
@@ -223,7 +181,6 @@ class MainActivity: FlutterFragmentActivity() {
 
 
 
-                    //startTrackingManager() // 지정해놓은 시간에 측정이 시작됨
                     wakeup20()
 
                     thread {

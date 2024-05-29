@@ -9,8 +9,7 @@ class AlarmHomeShortcutButton extends StatefulWidget {
   const AlarmHomeShortcutButton({Key? key, required this.refreshAlarms})
       : super(key: key);
 
-  static final GlobalKey<_AlarmHomeShortcutButtonState> global_key =
-  GlobalKey<_AlarmHomeShortcutButtonState>();
+
 
   @override
   State<AlarmHomeShortcutButton> createState() =>
@@ -33,7 +32,7 @@ class _AlarmHomeShortcutButtonState
     setState(() => showMenu = false);
 
 
-    DateTime dateTime1 = DateTime.now(); //수정함 test
+    DateTime dateTime1 = DateTime.now();
 
     final alarmSettings = AlarmSettings(
       id: DateTime.now().millisecondsSinceEpoch % 10000,

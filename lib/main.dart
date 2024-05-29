@@ -5,6 +5,7 @@ import 'package:alarm/alarm.dart';
 
 import 'package:flutter_application_1/screens/main_screen.dart';
 import 'package:flutter_application_1/screens/alarm_screen.dart';
+import 'package:flutter_application_1/screens/shortcut.dart';
 import 'package:flutter_application_1/service/platformservice.dart';
 
 Future<void> main() async {
