@@ -13,8 +13,9 @@ import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class AlarmPage extends StatefulWidget {
-  const AlarmPage({Key? key}) : super(key: key);
-
+  final AlarmSettings? alarmSettings;
+  const AlarmPage({Key? key, this.alarmSettings}) : super(key: key);
+  
   @override
   State<AlarmPage> createState() => _AlarmPageState();
 }
@@ -32,7 +33,8 @@ class _AlarmPageState extends State<AlarmPage> {
       checkAndroidNotificationPermission();
     }
     loadAlarms();
-    subscription ??= Alarm.ringStream.stream.listen(
+    
+    subscription ??= Alarm.ringStream.stream.asBroadcastStream().listen(
       (alarmSettings) => navigateToRingScreen(alarmSettings),
     );
   }
@@ -52,8 +54,7 @@ class _AlarmPageState extends State<AlarmPage> {
   }
 
   Future<void> navigateToRingScreen(AlarmSettings alarmSettings) async {
-    await Navigator.push(
-        context,
+    await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) =>
               AlarmRingScreen(alarmSettings: alarmSettings),
@@ -62,18 +63,6 @@ class _AlarmPageState extends State<AlarmPage> {
   }
 
   Future<void> navigateToAlarmScreen(AlarmSettings? settings) async {
-    // final res = await showModalBottomSheet<bool?>(
-    //     context: context,
-    //     isScrollControlled: true,
-    //     shape: RoundedRectangleBorder(
-    //       borderRadius: BorderRadius.circular(10.0),
-    //     ),
-    //     builder: (context) {
-    //       return FractionallySizedBox(
-    //         heightFactor: 0.75,
-    //         child: ExampleAlarmEditScreen(alarmSettings: settings),
-    //       );
-    //     });
     final res = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -213,9 +202,6 @@ class _AlarmPageState extends State<AlarmPage> {
                 minVerticalPadding: 10,
                 horizontalTitleGap: 10,
                 enabled: false,
-                // onLongPress: () {
-                //   // print("object");
-                // },
                 title: Row(
                   children: [
                     Text(
@@ -254,7 +240,6 @@ class _AlarmPageState extends State<AlarmPage> {
               const SizedBox(
                 height: 10,
               ),
-              // const SlideTransitionExample()
             ],
           ),
         ),

@@ -7,6 +7,10 @@ import 'package:flutter_application_1/screens/main_screen.dart';
 import 'package:flutter_application_1/screens/alarm_screen.dart';
 import 'package:flutter_application_1/service/platformservice.dart';
 
+Map<String, MaterialPageRoute<dynamic>?> routes = {
+  'ring': null,
+};
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -26,17 +30,25 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int currentIndex = 0;
-  final screens = [
-    MainPage(),
-    AlarmPage(),
-  ];
-
+  final List<Widget> pageList = [MainPage(), AlarmPage()];
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(useMaterial3: false),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        body: new Stack(
+          children: <Widget>[
+            new Offstage(
+              offstage: currentIndex != 0,
+              child: new TickerMode(enabled: currentIndex == 0, child: new MaterialApp(home: MainPage(), debugShowCheckedModeBanner: false,)),
+            ),
+            new Offstage(
+              offstage: currentIndex != 1,
+              child: new TickerMode(enabled: currentIndex == 1, child: new MaterialApp(home: AlarmPage(), debugShowCheckedModeBanner: false,)),
+            )
+          ]
+        ),
         backgroundColor: Color(0xffe9edf3),
         appBar: AppBar(
           elevation: 0,
@@ -49,8 +61,7 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
         ),
-        body: screens[currentIndex],
-        bottomNavigationBar: BottomNavigationBar(
+          bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.grey,
           selectedItemColor: Colors.white,
           unselectedItemColor: Colors.black,
