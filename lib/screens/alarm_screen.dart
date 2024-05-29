@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
-import 'package:go_router/go_router.dart';
 import 'edit_alarm.dart';
 import 'ring.dart';
 import 'shortcut.dart';
