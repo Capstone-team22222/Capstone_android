@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 class AlarmHomeShortcutButton extends StatefulWidget {
   final void Function() refreshAlarms;
 
+
   const AlarmHomeShortcutButton({Key? key, required this.refreshAlarms})
       : super(key: key);
+
+
 
   @override
   State<AlarmHomeShortcutButton> createState() =>
@@ -28,16 +31,20 @@ class _AlarmHomeShortcutButtonState
 
     setState(() => showMenu = false);
 
+
+    DateTime dateTime1 = DateTime.now();
+
     final alarmSettings = AlarmSettings(
       id: DateTime.now().millisecondsSinceEpoch % 10000,
-      dateTime: dateTime,
-      assetAudioPath: 'assets/marimba.mp3',
+      dateTime: dateTime1,
+      assetAudioPath: '../../assets/marimba.mp3',
       volume: volume,
       notificationTitle: '알람 테스트',
       notificationBody: '테스트',
     );
 
     await Alarm.set(alarmSettings: alarmSettings);
+    widget.refreshAlarms();
 
   }
 

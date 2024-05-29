@@ -5,6 +5,7 @@ import 'package:alarm/alarm.dart';
 
 import 'package:flutter_application_1/screens/main_screen.dart';
 import 'package:flutter_application_1/screens/alarm_screen.dart';
+import 'package:flutter_application_1/screens/shortcut.dart';
 import 'package:flutter_application_1/service/platformservice.dart';
 
 Map<String, MaterialPageRoute<dynamic>?> routes = {
@@ -16,13 +17,16 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   await Alarm.init(showDebugLogs: true);
+  runApp(MyApp(key: MyApp.globalKey)); // MyApp 위젯에 globalKey 적용
 
-  runApp(MyApp());
+ // runApp(MyApp());
   PlatformService.onAppStart(); //처음 앱 실행 시 호출하는 함수
 }
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+  static final GlobalKey<_MyAppState> globalKey = GlobalKey<_MyAppState>();
+
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -30,7 +34,17 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int currentIndex = 0;
+
   final List<Widget> pageList = [MainPage(), AlarmPage()];
+
+
+  void setTabIndex(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
