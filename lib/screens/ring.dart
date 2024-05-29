@@ -27,7 +27,6 @@ class AlarmRingScreen extends StatelessWidget {
               duration: Duration(milliseconds: 6 * 300),
               child: Text("🔔", style: TextStyle(fontSize: 50)),
             ),
-            // const Text("🔔", style: TextStyle(fontSize: 50)),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

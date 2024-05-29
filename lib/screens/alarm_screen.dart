@@ -63,18 +63,6 @@ class _AlarmPageState extends State<AlarmPage> {
   }
 
   Future<void> navigateToAlarmScreen(AlarmSettings? settings) async {
-    // final res = await showModalBottomSheet<bool?>(
-    //     context: context,
-    //     isScrollControlled: true,
-    //     shape: RoundedRectangleBorder(
-    //       borderRadius: BorderRadius.circular(10.0),
-    //     ),
-    //     builder: (context) {
-    //       return FractionallySizedBox(
-    //         heightFactor: 0.75,
-    //         child: ExampleAlarmEditScreen(alarmSettings: settings),
-    //       );
-    //     });
     final res = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -214,9 +202,6 @@ class _AlarmPageState extends State<AlarmPage> {
                 minVerticalPadding: 10,
                 horizontalTitleGap: 10,
                 enabled: false,
-                // onLongPress: () {
-                //   // print("object");
-                // },
                 title: Row(
                   children: [
                     Text(
@@ -255,7 +240,6 @@ class _AlarmPageState extends State<AlarmPage> {
               const SizedBox(
                 height: 10,
               ),
-              // const SlideTransitionExample()
             ],
           ),
         ),
