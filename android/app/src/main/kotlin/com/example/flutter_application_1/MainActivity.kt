@@ -35,20 +35,6 @@ import java.time.LocalTime
 import kotlin.concurrent.thread
 import kotlin.properties.Delegates
 
-/*
-
-> project를 실행하고 기상 시간을 입력하고 기다림. 자동으로 수면 분석 후 알람 울림.
-
-성공 :
- > 지정된 시간에 측정을 시작할 수 있음.
- > 기상 시간 기준 20분 전부터 sleepLevel을 측정함.
- > 얕은 수면(1)이 3번 측정되면 알람을 울림.
- > 사용자에게 기상 시간을 입력 받아 사용하는 기능.
- > 알람이 울릴 때 알람화면 안뜨는 것을 수정함.
- > 알람 문제 소리 문제 해결함.
-
-
- */
 
 
 @AndroidEntryPoint
@@ -58,6 +44,7 @@ class MainActivity: FlutterFragmentActivity() {
     private var userId: String? = null
     private val MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 1
     private val executor: ScheduledExecutorService = Executors.newScheduledThreadPool(4)
+    private val executorLoopSec: ScheduledExecutorService = Executors.newScheduledThreadPool(1)
 
     private lateinit var viewModel: MainViewModel
 
@@ -272,26 +259,40 @@ class MainActivity: FlutterFragmentActivity() {
         println("30초(loopTime)마다 SleepLevel 검사")
 
         var counter:Int = 0 // counter가 3이면 얕은 수면이라고 판단
+        var endCounter:Int = 0 // 얕은 수면 관찰이 안되더라도 시간이 되면 종료하기 위한 카운터 : 20분 동안 30초씩 검사. 총 40번 검사...
 
         var task1 = Runnable { //수면 검사 : 30초에 한번씩 검사
             viewModel.getcurrentanalysis() //실시간으로 받아옴
+            endCounter++
             println(">>>>>>>>>수면 상태 : " + viewModel._sleepLevel) //sleepStage 리스트의 마지막 요소
             if(viewModel._sleepLevel == 1){// level 1이 3번 나오면 얕은 수면 중이라 판단.
                 counter++
+                print("수면 측정 번호 : ")
+                println(endCounter)
                 println(">>>>>>>>>수면 상태 : " + viewModel._sleepLevel + "카운터 : "+ counter)
                 if(counter == 3){ //카운터 얕은수면(1) 3번 나오면 종료
                     println(">>>>>>>>>>>>카운터 종료")
                     stopTracking()
                     flag = true //알람을 울리기 위한 boolean flag => true : 알람 실행
+                    executorLoopSec.shutdownNow()
                     println(">>>>>>>>>>>>측정 종료")
                 }else{
                     println(">>>>>>>>>>>>>수면 중")
                 }
+            }else{ //수면 측정 시 얕은 수면이 아니면..
+                print("수면 측정 번호 : ")
+                println(endCounter)
+                if(endCounter == 40){ // 얕은 수면 관찰안되면 지정된 시간에 알람을 울림.(40번 검사하면  지정된 시간에 종료..)
+                    flag = true
+                    executorLoopSec.shutdownNow()
+                }
+                println(">>>>>>>>>>>>>수면 중")
             }
 
         }
-        executor.scheduleAtFixedRate(task1, 0, loopTime, TimeUnit.SECONDS)//30초(loopTime) 마다
+        executorLoopSec.scheduleAtFixedRate(task1, 0, loopTime, TimeUnit.SECONDS)//30초(loopTime) 마다
     }
+
 
 
     fun wakeup20(){ // 기상 시간 20분 전에 실행 설정
