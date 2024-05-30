@@ -1,12 +1,13 @@
+
 import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_ripple_animation/simple_ripple_animation.dart';
 
-class ExampleAlarmRingScreen extends StatelessWidget {
+class AlarmRingScreen extends StatelessWidget {
   final AlarmSettings alarmSettings;
 
-  const ExampleAlarmRingScreen({Key? key, required this.alarmSettings})
+  const AlarmRingScreen({Key? key, required this.alarmSettings})
       : super(key: key);
 
   @override
@@ -26,7 +27,6 @@ class ExampleAlarmRingScreen extends StatelessWidget {
               duration: Duration(milliseconds: 6 * 300),
               child: Text("🔔", style: TextStyle(fontSize: 50)),
             ),
-            // const Text("🔔", style: TextStyle(fontSize: 50)),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -55,7 +55,7 @@ class ExampleAlarmRingScreen extends StatelessWidget {
                 RawMaterialButton(
                   onPressed: () {
                     Alarm.stop(alarmSettings.id)
-                        .then((_) => Navigator.pop(context));
+                      .then((_) => Navigator.pop(context));
                   },
                   child: Text(
                     "중지",
