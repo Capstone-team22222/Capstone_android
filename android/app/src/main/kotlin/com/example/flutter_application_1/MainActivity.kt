@@ -63,10 +63,10 @@ class MainActivity: FlutterFragmentActivity() {
     var startTrackingMin:Int = 0
 
     //기상 시간 기준 7시간(420min) 전에 트랙킹을 시작하겠다.
-    var minusTime:Long =420
+    var minusTime:Long =21
 
     //기상 시간 기준, 측정을 시작할 시간을 설정, ex) 20 => wakeupHour = 7, wakeupMin = 40
-    val repeatTime:Long = 20
+    val repeatTime:Long = 420
 
     // repeatReport를 몇초 주기로 검사할지(단위 : sec), ex) 30초 주기로 데이터를 검사하겠다.
     val loopTime:Long = 30
