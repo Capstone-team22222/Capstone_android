@@ -67,20 +67,7 @@ class _SleepingScreenState extends State<SleepingScreen> {
       _timeLeft = newTimestamp;
     });
   }
-
-  void scheduleNotification(int timeLeft) {
-    var scheduledNotificationDateTime =
-    DateTime.now().add(Duration(milliseconds: timeLeft));
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'Unique id', 'channel name', 'channel description');
-    var iOSPlatformChannelSpecifics =
-    IOSNotificationDetails(sound: alarmMap[_soundName]);
-    NotificationDetails platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    flutterLocalNotificationsPlugin.schedule(0, "Alarm", "Wake up!",
-        scheduledNotificationDateTime, platformChannelSpecifics);
-  }
-
+  
   @override
   void initState() {
     super.initState();
