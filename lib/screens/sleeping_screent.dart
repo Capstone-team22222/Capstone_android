@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/ring.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart'; // 알림 취소할 때 사용, 아직 미설정
 import 'package:quiver/async.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,7 +26,7 @@ class _SleepingScreenState extends State<SleepingScreen> {
     scheduleNotification(timeLeft);
     print(timeLeft);
     CountdownTimer countdownTimer =
-        CountdownTimer(Duration(milliseconds: timeLeft), Duration(seconds: 1));
+    CountdownTimer(Duration(milliseconds: timeLeft), Duration(seconds: 1));
     _sub = countdownTimer.listen(null);
     _sub.onData((duration) {
       timeLeft -= 1000;
@@ -48,7 +48,7 @@ class _SleepingScreenState extends State<SleepingScreen> {
             var end = Offset.zero;
             var curve = Curves.ease;
             var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
             return SlideTransition(
               position: animation.drive(tween),
               child: child,
@@ -81,8 +81,8 @@ class _SleepingScreenState extends State<SleepingScreen> {
       child: ElevatedButton(
         onPressed: () {
           setState(() {
-            flutterLocalNotificationsPlugin.cancelAll();
-            Navigator.pop(context);
+            flutterLocalNotificationsPlugin.cancelAll(); // 로컬 알림 취소, 아직 미설정
+            Navigator.pop(context); // 현재 화면 닫음
           });
         },
         child: Text("취소",
