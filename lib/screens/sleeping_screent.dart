@@ -13,14 +13,12 @@ class SleepingScreen extends StatefulWidget {
 
 class _SleepingScreenState extends State<SleepingScreen> {
   int _alarmTimestamp, _timeLeft;
-  String _soundName = "Ring";
   StreamSubscription _sub;
 
   void setUp() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _alarmTimestamp =
         prefs.getInt("alarm") ?? DateTime.now().millisecondsSinceEpoch;
-    _soundName = prefs.getString("sound") ?? "Ring";
 
     int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
     int timeLeft = _alarmTimestamp - currentTimestamp;
@@ -28,7 +26,7 @@ class _SleepingScreenState extends State<SleepingScreen> {
     scheduleNotification(timeLeft);
     print(timeLeft);
     CountdownTimer countdownTimer =
-    CountdownTimer(Duration(milliseconds: timeLeft), Duration(seconds: 1));
+        CountdownTimer(Duration(milliseconds: timeLeft), Duration(seconds: 1));
     _sub = countdownTimer.listen(null);
     _sub.onData((duration) {
       timeLeft -= 1000;
@@ -41,23 +39,22 @@ class _SleepingScreenState extends State<SleepingScreen> {
       print("Done.");
       _sub.cancel();
       Navigator.push(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                AlarmRingScreen(alarmSettings: alarmSettings),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              var begin = Offset(0.0, 1.0);
-              var end = Offset.zero;
-              var curve = Curves.ease;
-              var tween =
-              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-              return SlideTransition(
-                position: animation.drive(tween),
-                child: child,
-              );
-            },
-          )
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              AlarmRingScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            var begin = Offset(0.0, 1.0);
+            var end = Offset.zero;
+            var curve = Curves.ease;
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+        ),
       );
     });
   }
@@ -93,43 +90,42 @@ class _SleepingScreenState extends State<SleepingScreen> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 22,
-            )
-        ),
+            )),
       ),
     );
 
     return Scaffold(
       body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                "남은 수면 시간:",
-                style:
-                TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                formatHMS((_timeLeft / 1000).round()),
-                style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              _cancelButton,
-            ],
-          )
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              "남은 수면 시간:",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              formatHMS((_timeLeft / 1000).round()),
+              style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            _cancelButton,
+          ],
+        ),
       ),
     );
   }
+
   // 시:분:초 메소드
   String formatHMS(int seconds) {
     int hours = seconds ~/ 3600;
     int minutes = (seconds % 3600) ~/ 60;
     int secs = seconds % 60;
-    
+
     return '$hours:$minutes:$secs';
   }
 
