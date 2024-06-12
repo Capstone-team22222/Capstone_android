@@ -95,46 +95,46 @@ class MainPage extends StatelessWidget {
 
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, // 버튼들을 화면 중앙에 위치시킵니다.
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: _callNativeStartSleepTrackingFunction,
-              child: Text('측정 시작'),
-            ),
-            SizedBox(height: 20), // 버튼 사이의 간격을 주기 위해 SizedBox를 사용합니다.
-            ElevatedButton(
-              onPressed: _callNativeStopSleepTrackingFunction, // 측정 종료 함수를 호출합니다.
-              child: Text('측정 종료'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _callNativeShowReportFunction, // 리포트 보기 함수를 호출합니다.
-              child: Text('리포트'),
-            ),
-            ElevatedButton(
-              onPressed: _callNativeShowCurrentFunction,
-              child: Text('현재 상태'),
-            ),
-            TextField(
-              onChanged: _hourValueChanged,
-              decoration: InputDecoration(
-                labelText: 'Hour',
-              ),
-            ),
-            TextField(
-              onChanged: _minValueChanged,
-              decoration: InputDecoration(
-                labelText: 'Min',
-              ),
-            ),
-
-            ElevatedButton(
-              onPressed: __callNativeWakeupFunction,
-              child: Text('Wakeup'), //일어날 시간
-            )
-          ],
-        ),
+        // child: Column(
+        //   mainAxisAlignment: MainAxisAlignment.center, // 버튼들을 화면 중앙에 위치시킵니다.
+        //   children: <Widget>[
+        //     ElevatedButton(
+        //       onPressed: _callNativeStartSleepTrackingFunction,
+        //       child: Text('측정 시작'),
+        //     ),
+        //     SizedBox(height: 20), // 버튼 사이의 간격을 주기 위해 SizedBox를 사용합니다.
+        //     ElevatedButton(
+        //       onPressed: _callNativeStopSleepTrackingFunction, // 측정 종료 함수를 호출합니다.
+        //       child: Text('측정 종료'),
+        //     ),
+        //     SizedBox(height: 20),
+        //     ElevatedButton(
+        //       onPressed: _callNativeShowReportFunction, // 리포트 보기 함수를 호출합니다.
+        //       child: Text('리포트'),
+        //     ),
+        //     ElevatedButton(
+        //       onPressed: _callNativeShowCurrentFunction,
+        //       child: Text('현재 상태'),
+        //     ),
+        //     TextField(
+        //       onChanged: _hourValueChanged,
+        //       decoration: InputDecoration(
+        //         labelText: 'Hour',
+        //       ),
+        //     ),
+        //     TextField(
+        //       onChanged: _minValueChanged,
+        //       decoration: InputDecoration(
+        //         labelText: 'Min',
+        //       ),
+        //     ),
+        //
+        //     ElevatedButton(
+        //       onPressed: __callNativeWakeupFunction,
+        //       child: Text('Wakeup'), //일어날 시간
+        //     )
+        //   ],
+        // ),
       ),
     );
   }
