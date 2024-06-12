@@ -23,6 +23,7 @@ import ai.asleep.asleepsdk.tracking.SleepTrackingManager
 import ai.asleep.asleepsdk.data.AsleepConfig
 import ai.asleep.asleepsdk.tracking.Reports
 import ai.asleep.asleepsdk.data.Report
+import ai.asleep.asleepsdk.data.SleepSession
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,15 +74,102 @@ class MainActivity: FlutterFragmentActivity() {
 
     private var nativeChannel: MethodChannel? = null // android에서 flutter용 MethodChannel
 
+    fun initasleepconfig(){
+        Asleep.DeveloperMode.isOn = true
+
+        Asleep.initAsleepConfig(
+            context = applicationContext,
+            apiKey = "sHDt5WgLsRgU0knI7KnCX7qnAPWzhundB8VMYqgF",
+            userId = viewModel.userId,
+            baseUrl = null,
+            callbackUrl = null,
+            service = "[input your AppName]",
+            object : Asleep.AsleepConfigListener {
+                override fun onSuccess(userId: String?, asleepConfig: AsleepConfig?) {
+                    viewModel.setUserId(userId)
+                    viewModel.setAsleepConfig(asleepConfig)
+                    println(viewModel.toString())
+                    Log.d(">>>> AsleepConfigListener", "onSuccess: userId - $userId")
+                    Log.d(">>>> AsleepConfigListener", "onSuccess: Developer Id - $userId")
+
+                }
+                override fun onFail(errorCode: Int, detail: String) {
+                    Log.d(">>>> AsleepConfigListener", "onFail: $errorCode - $detail")
+                }
+            })
+    }
+
+    class reportset(
+        x_user_id: String?,
+        timezone: String,
+        session_id: String?,
+        start_time: String,
+        end_time: String?,
+        unexpected_end_time: String?,
+        created_timezone: String,
+        sleep_time: String?,
+        wake_time: String?){
+
+        var x_user_id: String? = x_user_id
+        var timezone: String = timezone
+        var session_id: String? = session_id
+        var start_time: String = start_time
+        var end_time: String? = end_time
+        var unexpected_end_time: String? = unexpected_end_time
+        var created_timezone: String = created_timezone
+        var sleep_time: String? = sleep_time
+        var wake_time: String? = wake_time
+
+        fun toMap(): Map<String, Any?> {
+            return mapOf(
+                "x_user_id" to x_user_id,
+                "timezone" to timezone,
+                "session_id" to session_id,
+                "start_time" to start_time,
+                "end_time" to end_time,
+                "unexpected_end_time" to unexpected_end_time,
+                "created_timezone" to created_timezone,
+                "sleep_time" to sleep_time,
+                "wake_time" to wake_time
+            )
+        }
+
+    }
 
 
+    fun MutableList<reportset>.toMapList(): List<Map<String, Any?>> {
+        return this.map { it.toMap() }
+    }
 
+    fun getreport(multiplereports: List<SleepSession>?): MutableList<reportset> {
+        val reportsmap: MutableList<reportset> = mutableListOf()
+        var report: Report?
+        if (multiplereports != null){
+            for(obj in multiplereports) {
+                viewModel.getReport(obj.sessionId)
+                report = viewModel.reportLiveData.value
+                report?.let {
+                    reportsmap.add(reportset(
+                        x_user_id = viewModel.userId,
+                        timezone = it.timezone,
+                        session_id = obj.sessionId,
+                        start_time = it.session?.startTime ?: "",
+                        end_time = it.session?.endTime ?: "",
+                        unexpected_end_time = it.session?.unexpectedEndTime ?: "",
+                        created_timezone = it.session?.createdTimezone ?: "",
+                        sleep_time = it.stat?.sleepTime ?: "",
+                        wake_time = it.stat?.wakeTime ?: ""
+                    ))
+                }
+            }
+            return reportsmap
+        }
+        return reportsmap
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-
-
 
     }
 
@@ -107,48 +195,74 @@ class MainActivity: FlutterFragmentActivity() {
                         // 권한이 이미 부여되었다면, 마이크 사용 가능
                     }
 
-                    Asleep.DeveloperMode.isOn = true
-                    Asleep.initAsleepConfig(
-                        context = applicationContext,
-                        apiKey = "3vocIdIG1j7CBtr2hehvmKfzrrm1p40dtfuocF3t",
-                        userId = null,
-                        baseUrl = null,
-                        callbackUrl = null,
-                        service = "[input your AppName]",
-                        object : Asleep.AsleepConfigListener {
-                            override fun onSuccess(userId: String?, asleepConfig: AsleepConfig?) {
-                                viewModel.setUserId(userId)
-                                viewModel.setAsleepConfig(asleepConfig)
-                                println(viewModel.toString())
-                                Log.d(">>>> AsleepConfigListener", "onSuccess: userId - $userId")
-                                Log.d(">>>> AsleepConfigListener", "onSuccess: Developer Id - $userId")
-
-                            }
-                            override fun onFail(errorCode: Int, detail: String) {
-                                Log.d(">>>> AsleepConfigListener", "onFail: $errorCode - $detail")
-                            }
-                        })
-
+//                    Asleep.DeveloperMode.isOn = true
+//                    Asleep.initAsleepConfig(
+//                        context = applicationContext,
+//                        apiKey = "3vocIdIG1j7CBtr2hehvmKfzrrm1p40dtfuocF3t",
+//                        userId = null,
+//                        baseUrl = null,
+//                        callbackUrl = null,
+//                        service = "[input your AppName]",
+//                        object : Asleep.AsleepConfigListener {
+//                            override fun onSuccess(userId: String?, asleepConfig: AsleepConfig?) {
+//                                viewModel.setUserId(userId)
+//                                viewModel.setAsleepConfig(asleepConfig)
+//                                println(viewModel.toString())
+//                                Log.d(">>>> AsleepConfigListener", "onSuccess: userId - $userId")
+//                                Log.d(">>>> AsleepConfigListener", "onSuccess: Developer Id - $userId")
+//
+//                            }
+//                            override fun onFail(errorCode: Int, detail: String) {
+//                                Log.d(">>>> AsleepConfigListener", "onFail: $errorCode - $detail")
+//                            }
+//                        })
+                   initasleepconfig()
                    stopTracking()
-
-
-
                 }
 
 
                 "StartSleepTracking" -> {
+                    viewModel.setStartTrackingTime()
+                    viewModel.setErrorData(null,null)
+                    viewModel.setReport(null)
+                    if(viewModel.userId!=null){
+                        startService(Intent(this, RecordService::class.java).apply {
+                            action = RecordService.ACTION_START_OR_RESUME_SERVICE
+                        })
+                    } else {
+                        initasleepconfig()
+                        startService(Intent(this, RecordService::class.java).apply {
+                            action = RecordService.ACTION_START_OR_RESUME_SERVICE
+                        })
+                    }
                 }
 
                 "StopSleepTracking" -> {
-
+                    startService(Intent(this, RecordService::class.java).apply {
+                        action = RecordService.ACTION_STOP_SERVICE
+                    })
                 }
 
                 "GetReport" -> {
-
+                    viewModel.getReport()
+                    viewModel.reportLiveData.observe(this) { report ->
+                        if (report != null) {
+                            println(report)
+                        } else {
+                            println("Report is null")
+                        }
+                    }
                 }
 
                 "ShowCurrent" -> {
-                    ringAlarm()
+                    viewModel.getCurrentAnalysis()
+                }
+
+                "GetMutipleReports" -> {
+                    viewModel.getMultipleReports("2024-05-24")
+                    val reportsList = getreport(viewModel.MultipleReportsLiveData.value)
+                    val reportsData = reportsList.toMapList()
+                    result.success(reportsData)
                 }
 
                 "Wakeup" -> {
@@ -262,7 +376,7 @@ class MainActivity: FlutterFragmentActivity() {
         var endCounter:Int = 0 // 얕은 수면 관찰이 안되더라도 시간이 되면 종료하기 위한 카운터 : 20분 동안 30초씩 검사. 총 40번 검사...
 
         var task1 = Runnable { //수면 검사 : 30초에 한번씩 검사
-            viewModel.getcurrentanalysis() //실시간으로 받아옴
+            viewModel.getCurrentAnalysis() //실시간으로 받아옴
             endCounter++
             println(">>>>>>>>>수면 상태 : " + viewModel._sleepLevel) //sleepStage 리스트의 마지막 요소
             if(viewModel._sleepLevel == 1){// level 1이 3번 나오면 얕은 수면 중이라 판단.
