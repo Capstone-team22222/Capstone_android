@@ -1,6 +1,7 @@
 import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AlarmEditScreen extends StatefulWidget {
   final AlarmSettings? alarmSettings;
@@ -13,6 +14,10 @@ class AlarmEditScreen extends StatefulWidget {
 }
 
 class _AlarmEditScreenState extends State<AlarmEditScreen> {
+
+  // android에서 호출 -> 알람이 울림
+  static const MethodChannel methodChannel = MethodChannel("myChannel");
+  static const platform = MethodChannel('com.flutter_application_1.app/channel');
   bool loading = false;
 
   late bool creating;
@@ -26,6 +31,7 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
   void initState() {
     super.initState();
     creating = widget.alarmSettings == null;
+    methodChannel.setMethodCallHandler(nativeMethodCallHandler);
 
     if (creating) {
       selectedDateTime = DateTime.now().add(const Duration(minutes: 1));
@@ -40,6 +46,14 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
       vibrate = widget.alarmSettings!.vibrate;
       volume = widget.alarmSettings!.volume;
       assetAudio = widget.alarmSettings!.assetAudioPath;
+    }
+  }
+
+  Future<void> _callNativeWakeupFunction(String h, String m) async {
+    try {
+      final String result = await platform.invokeMethod('Wakeup',{'hour':h, 'min':m});
+    } on PlatformException catch (e) {
+      print("Failed to Invoke: '${e.message}'.");
     }
   }
 
@@ -104,10 +118,14 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
   void saveAlarm() {
     if (loading) return;
     setState(() => loading = true);
+
+    print("hour : `${selectedDateTime.hour}` min : `${selectedDateTime.minute}`");
+    _callNativeWakeupFunction(selectedDateTime.hour.toString(), selectedDateTime.minute.toString());
     Alarm.set(alarmSettings: buildAlarmSettings()).then((res) {
       if (res) Navigator.pop(context, true);
       setState(() => loading = false);
     });
+
   }
 
   void deleteAlarm() {
@@ -115,6 +133,38 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
       if (res) Navigator.pop(context, true);
     });
   }
+
+  Future<void> nativeMethodCallHandler(MethodCall methodCall) async {
+
+    switch (methodCall.method) {
+      case "ring":
+        print('알람 호출1');
+        ringRing(DateTime.now().millisecondsSinceEpoch % 10000);
+
+        break;
+
+
+      default:
+        print(' ... ');
+        break;
+    }
+  }
+
+  Future<void> ringRing(int num) async {
+    int id = num;
+    final alarmSettings = AlarmSettings(
+      id: id,
+      dateTime: DateTime.now().add(Duration(milliseconds: 200)),//현재시간으로 설정하면 처리되는 시간 때문에 알람이 울리지 않음.
+      assetAudioPath: assetAudio,
+      loopAudio: loopAudio,
+      vibrate: vibrate,
+      volume: volume,
+      notificationTitle: '얕은 수면에 의한 알람',
+      notificationBody: '일어나세요',
+    );
+    await Alarm.set(alarmSettings: alarmSettings);
+  }
+
 
   @override
   Widget build(BuildContext context) {
