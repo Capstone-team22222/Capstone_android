@@ -102,3 +102,5 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
 
 }
+tasks.register("prepareKotlinBuildScriptModel"){}
+
